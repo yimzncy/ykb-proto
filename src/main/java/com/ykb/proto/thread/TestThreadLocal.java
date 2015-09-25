@@ -2,7 +2,7 @@ package com.ykb.proto.thread;
 
 import java.util.Arrays;
 
-public class TestThreadLocal extends Thread {
+public class TestThreadLocal implements Runnable {
 	
 	private Sequence sequence;
 
@@ -12,22 +12,43 @@ public class TestThreadLocal extends Thread {
 	
 	public void run() {
 		for (@SuppressWarnings("unused") Integer i:Arrays.asList(1,2,3)) {
+//			printStackTrace();
 			System.out.println(Thread.currentThread().getName()
 					+ " => " + sequence.getNumber()
 					+ " => " + sequence.getString());
 		}
 	}
 	
+	public static void printStackTrace() {
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		for (StackTraceElement stackTraceElement:stackTraceElements) {
+			System.out.println("---" + stackTraceElement.getClassName() 
+					+ "---" + stackTraceElement.getFileName()
+					+ "---" + stackTraceElement.getMethodName()
+					+ "---" + stackTraceElement.getLineNumber()
+					+ "---");
+		}
+	}
+	
 	public static void main(String[] args) {
 		Sequence sequence = new SequenceImpl();
 		
-		TestThreadLocal thread1 = new TestThreadLocal(sequence);
-		TestThreadLocal thread2 = new TestThreadLocal(sequence);
-		TestThreadLocal thread3 = new TestThreadLocal(sequence);
+		TestThreadLocal tl = new TestThreadLocal(sequence);
 		
-		thread1.start();
-		thread2.start();
-		thread3.start();
+		Thread t1 = new Thread(tl);
+		Thread t2 = new Thread(tl);
+		Thread t3 = new Thread(tl);
+		
+		try {
+			t1.start();
+			t1.join();
+			t2.start();
+			t2.join();
+			t3.start();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }
@@ -41,6 +62,7 @@ class SequenceImpl implements Sequence {
 		}
 	};
 	
+	// 必须初始化，否则为null
 	private static ThreadLocal<String> stringContainer = new ThreadLocal<String>();
 
 	@Override
