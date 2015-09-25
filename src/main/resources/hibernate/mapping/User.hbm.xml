@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- package="com.ykb.proto.pojo" + class="User" OR class="com.ykb.proto.pojo.User" -->
+<hibernate-mapping package="com.ykb.proto.pojo">
+
+	<class name="User" table="USER">
+		<id name="id" column="USER_ID">
+			<!-- identifier generation strategy -->
+            <generator class="native"/>
+        </id>
+        <property name="name" column="USER_NAME"/>
+        <property name="capital"/>
+        <property name="defaultCommission"/>
+        <property name="defaultStampTax"/>
+        <list name="stockPositions" table="STOCKPOSITION_LIST">
+        	<!-- identifier for the User side -->
+        	<key column="USER_ID"/>
+        	<!-- identifier for the StockPosition side + the class -->
+        	<one-to-many column="STOCKPOSITION_ID" class="StockPosition"/>
+        </list>
+	</class>
+
+</hibernate-mapping>

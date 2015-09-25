@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd  
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+	<context:component-scan base-package="com.ykb.proto.service.impl"/>
+	<context:component-scan base-package="com.ykb.proto.service.proxy"/>
+	
+	<!-- 配置AspectJ， proxy-target-class默认false只能代理接口(使用JDK代理)，true能代理目标类(使用CGLib动态代理)-->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<!-- 配置一个切面 
+	<bean id="testAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice" ref="testBeforeAndAfterAdvice"/>
+		<property name="pattern" value="com.ykb.proto.service.impl.TestServiceImpl.tt.*"/>
+	</bean>-->
+	
+	<!-- 配置一个代理 
+	<bean id="springAopProxy" class ="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="interfaces" value="com.ykb.proto.service.TestService"/>
+		<property name="target" ref="testServiceImpl"/>
+		<property name="interceptorNames">
+			<list>
+				<value>testAdvisor</value>
+				<value>testThrowsAdvice</value>
+			</list>
+		</property>
+	</bean>-->
+
+</beans>
